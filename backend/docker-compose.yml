@@ -3,6 +3,7 @@ version: '3.8'
 services:
   web:
     build: .
+    container_name: bookmarks_backend
     restart: always
     command: >
       sh -c "python manage.py collectstatic --noinput &&
@@ -21,15 +22,17 @@ services:
       - db
   db:
     image: postgres:13.0-alpine
+    container_name: bookmarks_backend_db
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=nick
       - POSTGRES_PASSWORD=33992433
-      - POSTGRES_DB=my_website_db
+      - POSTGRES_DB=bookmarks_db
   
   nginx:
     build: ./nginx
+    container_name: bookmarks_nginx
     volumes:
       - static_volume:/usr/src/app/static
       - media_volume:/usr/src/app/media
@@ -50,4 +53,3 @@ volumes:
   postgres_data:
   static_volume:
   media_volume:
-  
