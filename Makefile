@@ -1,7 +1,7 @@
 docker:
 	docker-compose build && docker-compose up
 pull:
-	git pull origin main
+	git checkout main && git pull origin main
 static:
 	python manage.py collectstatic
 migrate:
