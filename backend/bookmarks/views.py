@@ -33,7 +33,7 @@ class BookmarkApi(
 
     def perform_create(self, serializer):
         serializer.is_valid(raise_exception=True)
-        serializer.validated_data.pop("user")
+        # serializer.validated_data.pop("user")
         bookmark_create(serializer.validated_data)
         return Response({"message": "bookmark added" }, status=status.HTTP_201_CREATED)
 

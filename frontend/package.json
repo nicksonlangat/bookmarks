@@ -7,6 +7,8 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@headlessui/vue": "^1.7.16",
+    "@tabler/icons-vue": "^2.34.0",
     "axios": "^1.5.0",
     "core-js": "^3.8.3",
     "mitt": "^3.0.1",
