@@ -20,8 +20,6 @@ class BookmarkSerializer(serializers.ModelSerializer):
         except AttributeError:
             url = obj["url"].replace(" ","")
         site = urlparse(url).netloc
-        site = f"https://{site}"
-
         return site
 
 

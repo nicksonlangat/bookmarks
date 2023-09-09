@@ -6,21 +6,30 @@ const state = {
 }
 
 const mutations = {
-  SAVE_TOKEN (payload) {
-    localStorage.setItem("navis", JSON.stringify(payload))
-  },
   SET_USER(state, payload){
     state.user = payload
   }
 }
 
 const actions = {
+    async createUser({ commit }, { payload, cb }) {
+        return await Api()
+            .post('/accounts/register/', payload)
+            .then((response) => {
+                if (cb) {
+                    cb(response.data)
+                }
+                return response.data
+            })
+            .catch((error) => {
+                return Promise.reject(error)
+            })
+    },
     async loginUser({ commit }, { payload, cb }) {
         return await AuthApi()
             .post('accounts/login/', payload)
             .then((response) => {
-                // commit('SAVE_TOKEN', response.data)
-                localStorage.setItem("navis", JSON.stringify(response.data))
+                localStorage.setItem("bookmarks", JSON.stringify(response.data))
                 if (cb) {
                     cb(response.data)
                 }
