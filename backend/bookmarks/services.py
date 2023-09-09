@@ -29,6 +29,7 @@ def bookmark_create(data, *args, **kwargs) -> Bookmark:
         description = soup.find("meta", property="og:description")
 
     obj = Bookmark(
+        user=data['user'],
         title=title['content'] if title else "", 
         url=url_link['content'] if url_link else url, 
         description=description['content'] if description else "", 

@@ -22,24 +22,21 @@ class BookmarkApi(
     CreateAPIView, ListAPIView, 
     RetrieveUpdateAPIView, RetrieveDestroyAPIView):
 
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     serializer_class = BookmarkSerializer
 
     class Pagination(PageNumberPagination):
         default_limit = 16
 
-    queryset = bookmark_list()
-
     def perform_create(self, serializer):
         serializer.is_valid(raise_exception=True)
-        # serializer.validated_data.pop("user")
         bookmark_create(serializer.validated_data)
-        return Response({"message": "bookmark added" }, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_201_CREATED)
 
     def get(self, request, *args, **kwargs):
         filters = request.query_params
-        qs = bookmark_list(filters=filters)
+        qs = bookmark_list(filters=filters, user=request.user)
 
         return get_paginated_response(
             pagination_class=self.Pagination,

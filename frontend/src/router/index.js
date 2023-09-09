@@ -4,7 +4,24 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('../views/Home.vue')
+    component: () => import('../views/Home.vue'),
+    async beforeEnter(to, from, next) {
+      try {
+        var hasPermission = localStorage.getItem("hasPermission");
+        if (hasPermission) {
+          next()
+        }
+        else {
+          next({
+            name: "login"
+          })
+        }
+      } catch (e) {
+        next({
+          name: "login"
+        })
+      }
+    } 
   },
   {
     path: '/login',

@@ -1,11 +1,11 @@
 <template>
-<div class="flex flex-col items-center text-stone-300 font-base justify-center">
+<div class="flex mx-4 lg:mx-0 flex-col items-center text-stone-300 font-base justify-center">
     <h3 class="mt-32 text-3xl">Welcome back</h3>
-    <h3 class="mt-5 text-xl text-stone-400">Please log in to continue to your account</h3>
-    <form class="w-1/3 mt-10 flex flex-col gap-8">
+    <h3 class="mt-5 text-xl text-center text-stone-400">Please log in to continue to your account</h3>
+    <form class="w-full lg:w-1/3 mt-10 flex flex-col gap-8">
         <div class="flex flex-col gap-2 text-stone-300">
             <label for="">Email</label>
-            <input v-model="user.email" type="email" class="bg-[#111111] border border-stone-900 px-6 py-2 rounded-md focus:outline-none focus:right-0">
+            <input v-model="user.email" type="email" class="bg-[#111111] focus:bg-[#111111] border border-stone-900 px-6 py-2 rounded-md focus:outline-none focus:right-0">
         </div>
         <div class="flex flex-col gap-2 text-stone-300">
             <label for="">Password</label>

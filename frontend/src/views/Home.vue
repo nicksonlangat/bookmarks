@@ -3,10 +3,10 @@
 
     <div class="mx-4 lg:mx-0 flex justify-between items-center mt-2 text-stone-300">
         <div class="flex flex-col gap-2">
-            <h3 class="text-2xl">Good morning, Nick</h3>
+            <h3 class="text-2xl">Good morning, {{ user?.first_name }} {{ user?.last_name }}</h3>
             <p class="text-stone-400">{{ date }}</p>
         </div>
-        <button class="bg-[#6c53cd] text-stone-100 px-8 py-1.5 rounded-lg">
+        <button @click="logoutUser" class="bg-[#6c53cd] text-stone-100 px-8 py-1.5 rounded-lg">
             Logout
         </button>
     </div>
@@ -135,7 +135,7 @@
             </li>
         </ul>
     </div>
-    <div v-else class=" mt-20 text-3xl text-stone-300 flex items-center justify-center">
+    <div v-else class="mx-4 lg:mx-0 mt-20 lg:text-3xl text-stone-300 flex items-center justify-center">
         <h3>You have not saved any bookmarks yet.</h3>
     </div>
 </div>
@@ -178,7 +178,8 @@ export default {
     },
     computed: {
         ...mapGetters({
-            storedBookmarks: 'getStoredBookmarks'
+            storedBookmarks: 'getStoredBookmarks',
+            storedUser: 'getStoredUser'
         }),
         bookmarks() {
             return this.storedBookmarks.filter((bookmark) => {
@@ -187,6 +188,9 @@ export default {
         },
         date() {
             return moment().format('MMMM Do YYYY')
+        },
+        user() {
+            return this.storedUser
         }
     },
     methods: {
@@ -194,7 +198,8 @@ export default {
             getAllBookmarks: 'getAllBookmarks',
             deleteBookmark: 'deleteBookmark',
             createBookmark: 'createBookmark',
-            updateBookmark: 'updateBookmark'
+            updateBookmark: 'updateBookmark',
+            getUsersMe: 'getUsersMe'
         }),
         ...mapMutations({
             INCREASE_PAGE: 'INCREASE_PAGE',
@@ -248,7 +253,8 @@ export default {
             if (this.currentBookmark == null) {
                 this.createBookmark({
                     payload: {
-                        "url": this.link
+                        "url": this.link,
+                        "user": this.user.id
                     },
                     cb: (() => {
                         this.link = ""
@@ -286,6 +292,12 @@ export default {
                     this.currentPage = res.current_page_number
                 }
             })
+
+            this.getUsersMe({
+                cb: () => {
+                    
+                }
+            })
         },
         formatDate(date) {
             return moment(date).format("MMM Do YY")
@@ -301,7 +313,14 @@ export default {
                     })
                 })
             })
-        }
+        },
+        logoutUser() {
+            localStorage.removeItem("bookmarks")
+            localStorage.removeItem("hasPermission")
+            this.$router.push({
+                "name": "login"
+            })
+        },
     },
     mounted() {
         this.init()

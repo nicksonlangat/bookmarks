@@ -30,6 +30,7 @@ const actions = {
             .post('accounts/login/', payload)
             .then((response) => {
                 localStorage.setItem("bookmarks", JSON.stringify(response.data))
+                localStorage.setItem("hasPermission", true)
                 if (cb) {
                     cb(response.data)
                 }
