@@ -26,3 +26,15 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             user.save()
             return user
 
+class UserPasswordResetSerializer(serializers.Serializer):
+        email = serializers.EmailField(required=True)
+        
+        class Meta:
+            fields = [ "email" ]
+
+
+class UserPasswordSerializer(serializers.Serializer):
+        password = serializers.CharField(required=True)
+        
+        class Meta:
+            fields = [ "password" ]

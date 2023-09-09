@@ -13,7 +13,7 @@ const mutations = {
 
 const actions = {
     async createUser({ commit }, { payload, cb }) {
-        return await Api()
+        return await AuthApi()
             .post('/accounts/register/', payload)
             .then((response) => {
                 if (cb) {
@@ -41,9 +41,9 @@ const actions = {
             })
       },
       
-      async changePassword({ commit }, { payload, cb }) {
-      return await Api()
-        .patch('/accounts/users/password/change', payload)
+      async resetPasswordRequest({ commit }, { payload, cb }) {
+      return await AuthApi()
+        .post('/accounts/password/reset/', payload)
         .then((response) => {
             if (cb) {
                 cb(response.data)
@@ -55,6 +55,32 @@ const actions = {
         })
       },
 
+      async verifyResetToken({ commit }, { uidb4, token,  cb }) {
+        return await AuthApi()
+            .get(`/accounts/password-reset/${uidb4}/${token}/`)
+            .then((response) => {
+                if (cb) {
+                    cb(response.data)
+                }
+                return response.data
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        },
+        async resetPassword({ commit }, { payload, cb }) {
+            return await AuthApi()
+              .post('/accounts/new/password/', payload)
+              .then((response) => {
+                  if (cb) {
+                      cb(response.data)
+                  }
+                  return response.data
+              })
+              .catch((error) => {
+                  return Promise.reject(error)
+              })
+            },
       async getUsersMe({ commit }, { setResult=true, cb }) {
         return await Api()
             .get('/accounts/users/me')
@@ -70,15 +96,13 @@ const actions = {
             .catch((error) => {
                 return Promise.reject(error)
             })
-        },
-      
+        }
 }
 const getters = {
     getStoredUser: (state) => {
         return state.user
     }
 }
-
 const authModule = {
     state,
     mutations,

@@ -1,9 +1,9 @@
 <template>
 <div class="container font-base mx-auto">
 
-    <div class="mx-4 lg:mx-0 flex justify-between items-center mt-2 text-stone-300">
+    <div class="mx-4 lg:mx-0 flex justify-between items-center mt-5 text-stone-300">
         <div class="flex flex-col gap-2">
-            <h3 class="text-2xl">Good morning, {{ user?.first_name }} {{ user?.last_name }}</h3>
+            <h3 class="text-2xl">Hi, {{ user?.first_name }} {{ user?.last_name }}</h3>
             <p class="text-stone-400">{{ date }}</p>
         </div>
         <button @click="logoutUser" class="bg-[#6c53cd] text-stone-100 px-8 py-1.5 rounded-lg">
