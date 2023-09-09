@@ -1,9 +1,9 @@
 <template>
-<div class="container mx-auto">
+<div class="container font-base mx-auto">
 
-    <div class="flex justify-between items-center mt-5 text-stone-300">
+    <div class="mx-4 lg:mx-0 flex justify-between items-center mt-5 text-stone-300">
         <div class="flex flex-col gap-2">
-            <h3 class="text-2xl">Good morning</h3>
+            <h3 class="text-2xl">Good morning, Nick</h3>
             <p class="text-stone-400">Friday, Sept 08</p>
         </div>
         <span class="bg-[#111111] px-2 py-2 rounded-lg">
@@ -14,15 +14,15 @@
     </div>
     <Notification />
 
-    <div class="flex mt-10 justify-between items-center text-stone-300">
-        <div class="w-1/2 relative">
+    <div class=" mx-4 lg:mx-0 flex-col gap-4 lg:gap-0 lg:flex-row flex mt-10 justify-between items-center text-stone-300">
+        <div class="w-full lg:w-1/2 relative">
             <input @keyup.enter="submitNewBookmark" v-model="link" type="text" class="bg-[#111111] w-full rounded-lg py-2 pl-5  focus:outline-none focus:ring-0 placeholder:text-stone-400" placeholder="https://">
             <svg xmlns="http://www.w3.org/2000/svg" class="absolute top-2.5 right-5" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                 <path d="M18 6v6a3 3 0 0 1 -3 3h-10l4 -4m0 8l-4 -4"></path>
             </svg>
         </div>
-        <div class="w-1/4 relative">
+        <div class="w-full lg:w-1/4 relative">
             <input v-model="text" type="text" class="bg-[#111111] w-full rounded-lg py-2 pl-10  focus:outline-none focus:ring-0 placeholder:text-stone-400" placeholder="Search">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 absolute top-2.5 text-stone-400 left-2 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
@@ -31,7 +31,7 @@
 
     </div>
 
-    <div v-if="bookmarks.length" class="grid grid-cols-4 mt-10 gap-5 gap-y-4">
+    <div v-if="bookmarks.length" class="mx-4 lg:mx-0 grid lg:grid-cols-4 mt-10 gap-5 gap-y-4">
         <div v-for="bookmark in bookmarks" class="bg-[#111111] flex flex-col gap-12 overflow-hidden text-stone-200 h-32 rounded-lg">
             <div class="flex justify-between items-center ml-5 mr-5 mt-2">
                 <div class="flex gap-2 mt-2 items-center">
@@ -43,7 +43,7 @@
                     <h3>{{ bookmark.site_name }}</h3>
                 </div>
 
-                <div class="fixed top-52 ml-12 mt-1 w-56 text-right">
+                <div class="lg:fixed ml-12 mt-1 w-56 text-right">
                     <Menu as="div" class="relative inline-block text-left">
                         <div>
                             <MenuButton class="inline-flex w-full justify-center text-sm font-medium">
@@ -120,7 +120,7 @@
                 </div>
             </div>
             <div class="ml-5 text-stone-400">
-                <h3>{{ bookmark.url }}</h3>
+                <a target="_blank" :href="bookmark.url">{{ bookmark.formated_url }}</a>
             </div>
         </div>
     </div>
@@ -170,7 +170,7 @@ export default {
         }),
         bookmarks() {
             return this.storedBookmarks.filter((bookmark) => {
-                return bookmark.title.toLowerCase().includes(this.text.toLowerCase())
+                return bookmark.url.toLowerCase().includes(this.text.toLowerCase())
             })
         }
     },

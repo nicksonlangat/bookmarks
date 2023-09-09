@@ -27,7 +27,7 @@ class BookmarkApi(
     serializer_class = BookmarkSerializer
 
     class Pagination(PageNumberPagination):
-        default_limit = 13
+        default_limit = 16
 
     queryset = bookmark_list()
 
