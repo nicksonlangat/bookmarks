@@ -2,7 +2,7 @@
 <div class="flex mx-4 lg:mx-0 flex-col items-center text-stone-300 font-base justify-center">
     <h3 class="mt-12 text-3xl">Create your account</h3>
 
-    <form class="w-full lg:w-1/3 mt-10 flex flex-col gap-8">
+    <form class="lg:w-1/3 mt-10 flex flex-col gap-8">
         <div class="flex flex-col gap-2 text-stone-300">
             <label for="">First name</label>
             <input v-model="user.first_name" type="text" class="bg-[#111111] border border-stone-900 px-6 py-2 rounded-md focus:outline-none focus:right-0">
