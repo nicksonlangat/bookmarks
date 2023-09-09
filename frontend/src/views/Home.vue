@@ -6,7 +6,7 @@
             <h3 class="text-2xl">Hi, {{ user?.first_name }} {{ user?.last_name }}</h3>
             <p class="text-stone-400">{{ date }}</p>
         </div>
-        <button @click="logoutUser" class="bg-[#6c53cd] text-stone-100 px-8 py-1.5 rounded-lg">
+        <button @click="logoutUser" class="bg-[#6c53cd] text-stone-100 px-8 py-1.5 rounded-md">
             Logout
         </button>
     </div>

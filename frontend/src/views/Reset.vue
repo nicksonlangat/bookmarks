@@ -30,7 +30,7 @@ export default {
     data() {
         return {
             user: {
-                email: "nicksonlangat95@gmail.com"
+                email: ""
             },
             emailSent: false
         }
