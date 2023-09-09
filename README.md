@@ -10,7 +10,7 @@ The first step is a new user goes to the registration page and they are presente
 Next up they are navigated to the login page where, once they supply valid credentials, 
 they are authenticated and taken to the main dashboard/home page where they have access to the following screen:
 <p align="start">
-  <img src="screens/screen.png" height="600">
+  <img src="screens/screen.png" >
 </p>
 A lot is happening on here so let’s break it down:
 
