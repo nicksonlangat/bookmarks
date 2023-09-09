@@ -9,6 +9,7 @@
     <div v-if="action === 'delete'" class="ml-3 text-xs text-white font-base">{{ item }} removed from the system</div>
     <div v-if="action === 'add'" class="ml-3 text-xs text-white font-base">{{ item }} added to the system</div>
     <div v-if="action === 'edit'" class="ml-3 text-xs text-white font-base">{{ item }} successfully updated</div>
+    <div v-if="action === 'copy'" class="ml-3 text-xs text-white font-base">{{ item }} successfully copied</div>
 </TransitionRoot>
 </template>
 <script>

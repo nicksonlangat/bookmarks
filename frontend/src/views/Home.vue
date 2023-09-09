@@ -16,7 +16,7 @@
 
     <div class="flex mt-10 justify-between items-center text-stone-300">
         <div class="w-1/2 relative">
-            <input @keyup.enter="submitNewLink" v-model="link" type="text" class="bg-[#111111] w-full rounded-lg py-2 pl-5  focus:outline-none focus:ring-0 placeholder:text-stone-400" placeholder="https://">
+            <input @keyup.enter="submitNewBookmark" v-model="link" type="text" class="bg-[#111111] w-full rounded-lg py-2 pl-5  focus:outline-none focus:ring-0 placeholder:text-stone-400" placeholder="https://">
             <svg xmlns="http://www.w3.org/2000/svg" class="absolute top-2.5 right-5" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                 <path d="M18 6v6a3 3 0 0 1 -3 3h-10l4 -4m0 8l-4 -4"></path>
@@ -31,7 +31,7 @@
 
     </div>
 
-    <div class="grid grid-cols-4 mt-10 gap-5 gap-y-4">
+    <div v-if="bookmarks.length" class="grid grid-cols-4 mt-10 gap-5 gap-y-4">
         <div v-for="bookmark in bookmarks" class="bg-[#111111] flex flex-col gap-12 overflow-hidden text-stone-200 h-32 rounded-lg">
             <div class="flex justify-between items-center ml-5 mr-5 mt-2">
                 <div class="flex gap-2 mt-2 items-center">
@@ -59,7 +59,7 @@
                             <MenuItems class="absolute right-0 mt-2 w-40 origin-top-right divide-y divide-gray-100 rounded-md bg-white  shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                 <div class="px-1 py-1">
                                     <MenuItem v-slot="{ active }">
-                                    <button @click="editLink(bookmark.id)" :class="[
+                                    <button @click="editBookmark(bookmark)" :class="[
                   active ? 'bg-violet-500 text-white' : 'text-black',
                   'group flex gap-2 w-full items-center rounded-md px-2 py-2 text-sm',
                 ]">
@@ -71,7 +71,7 @@
                                     </button>
                                     </MenuItem>
                                     <MenuItem v-slot="{ active }">
-                                    <button @click="copyLink(bookmark.url)" :class="[
+                                    <button @click="copyBookmark(bookmark.url)" :class="[
                   active ? 'bg-violet-500 text-white' : 'text-gray-900',
                   'group flex gap-2 w-full items-center rounded-md px-2 py-2 text-sm',
                 ]">
@@ -86,7 +86,7 @@
                                 <div class="px-1 py-1">
 
                                     <MenuItem v-slot="{ active }">
-                                    <button @click="copyLink(bookmark.url)" :class="[
+                                    <button @click="duplicateBookmark(bookmark.url)" :class="[
                   active ? 'bg-violet-500 text-white' : 'text-gray-900',
                   'group flex w-full gap-2 items-center rounded-md px-2 py-2 text-sm',
                 ]">
@@ -102,7 +102,7 @@
 
                                 <div class="px-1 py-1">
                                     <MenuItem v-slot="{ active }">
-                                    <button @click="copyLink(bookmark.id)" :class="[
+                                    <button @click="removeBookmark(bookmark.id)" :class="[
                   active ? 'bg-violet-500 text-white' : 'text-gray-900',
                   'group flex w-full gap-2 items-center rounded-md px-2 py-2 text-sm',
                 ]">
@@ -123,6 +123,9 @@
                 <h3>{{ bookmark.url }}</h3>
             </div>
         </div>
+    </div>
+    <div v-else class=" mt-20 text-3xl text-stone-300 flex items-center justify-center">
+        <h3>You have not saved any bookmarks yet.</h3>
     </div>
 </div>
 </template>
@@ -156,7 +159,9 @@ export default {
             previousPage: "",
             nextPage: "",
             currentPage: "",
-            link: ""
+            link: "",
+            linkCopied: false,
+            currentBookmark: null,
         }
     },
     computed: {
@@ -173,7 +178,8 @@ export default {
         ...mapActions({
             getAllBookmarks: 'getAllBookmarks',
             deleteBookmark: 'deleteBookmark',
-            createBookmark: 'createBookmark'
+            createBookmark: 'createBookmark',
+            updateBookmark: 'updateBookmark'
         }),
         ...mapMutations({
             INCREASE_PAGE: 'INCREASE_PAGE',
@@ -191,8 +197,41 @@ export default {
                 this.init()
             }
         },
-        submitNewLink() {
-            this.createBookmark({
+        editBookmark(bookmark){
+          this.link = bookmark.url
+          this.currentBookmark = bookmark
+        },
+        duplicateBookmark(link) {
+            this.link = link
+            this.submitNewBookmark()
+        },
+        unsecuredCopyToClipboard(text) {
+            const textArea = document.createElement("textarea")
+            textArea.value = text
+            document.body.appendChild(textArea)
+            textArea.focus()
+            textArea.select()
+            try {
+                document.execCommand('copy')
+            } catch (err) {
+                console.error('Unable to copy to clipboard', err)
+            }
+            document.body.removeChild(textArea)
+        },
+        copyBookmark(link) {
+            if (window.isSecureContext && navigator.clipboard) {
+                navigator.clipboard.writeText(link)
+            } else {
+                this.unsecuredCopyToClipboard(link)
+            }
+            this.emitter.emit("showNotification", {
+                "action": "copy",
+                "item": "Link"
+            })
+        },
+        submitNewBookmark() {
+            if(this.currentBookmark == null) {
+              this.createBookmark({
                 payload: {
                     "url": this.link
                 },
@@ -205,6 +244,24 @@ export default {
                     this.init()
                 })
             })
+            }
+            else {
+              this.updateBookmark({
+                uuid: this.currentBookmark.id,
+                payload: {
+                    "url": this.link
+                },
+                cb: (() => {
+                    this.link = ""
+                    this.emitter.emit("showNotification", {
+                        "action": "edit",
+                        "item": "Bookmark"
+                    })
+                    this.init()
+                    this.currentBookmark = null
+                })
+            })
+            }
         },
         init() {
             this.getAllBookmarks({
@@ -224,6 +281,10 @@ export default {
                 uuid: id,
                 cb: (() => {
                     this.init()
+                    this.emitter.emit("showNotification", {
+                        "action": "delete",
+                        "item": "Bookmark"
+                    })
                 })
             })
         }
