@@ -5,9 +5,9 @@ from .filters import (
 )
 from .models import Bookmark
 
-def bookmark_list(*, filters=None) -> QuerySet[Bookmark]:
+def bookmark_list(*, filters=None, user) -> QuerySet[Bookmark]:
     filters = filters or {}
 
-    qs = Bookmark.objects.all()
+    qs = Bookmark.objects.filter(user=user)
 
     return BaseBookmarkFilter(filters, qs).qs
