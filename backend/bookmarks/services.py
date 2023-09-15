@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 
 from common.services import model_update
-from .models import Bookmark
+from .models import Bookmark, Color
 
 @transaction.atomic
 def bookmark_create(data, *args, **kwargs) -> Bookmark:
@@ -50,3 +50,30 @@ def bookmark_update(*, bookmark: Bookmark, data) -> Bookmark:
     bookmark, has_updated = model_update(instance=bookmark, fields=non_side_effect_fields, data=data)
 
     return bookmark
+
+
+@transaction.atomic
+def color_create(data, *args, **kwargs) -> Color:
+    code = data['code']
+    
+    if code.startswith("#"):
+        pass
+    else:
+        code = f"#{code}"
+    
+    obj = Color(
+        code=code
+    )
+
+    obj.full_clean()
+    obj.save()
+
+    return obj
+
+@transaction.atomic
+def color_update(*, color: Color, data) -> Color:
+    non_side_effect_fields = []
+
+    color, has_updated = model_update(instance=color, fields=non_side_effect_fields, data=data)
+
+    return color

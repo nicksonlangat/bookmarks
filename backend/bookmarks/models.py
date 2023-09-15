@@ -14,3 +14,11 @@ class Bookmark(BaseModel):
 
     def __str__(self) -> str:
         return str(self.title)
+
+
+class Color(BaseModel):
+    code = models.CharField(max_length=150, unique=True)
+    
+    def __str__(self):
+        return self.code
+
