@@ -2,7 +2,7 @@ from urllib.parse import urlparse
 from rest_framework import serializers
 from accounts.serializers import UserSerializer
 from accounts.models import User
-from .models import Bookmark
+from .models import Bookmark, Color
 
 
 class BookmarkSerializer(serializers.ModelSerializer):
@@ -32,3 +32,12 @@ class BookmarkSerializer(serializers.ModelSerializer):
     #     except AttributeError:
     #         pass
     #     return data
+
+
+class ColorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Color
+        fields = [
+            "id", "code",
+             "created_at", "updated_at"
+        ]

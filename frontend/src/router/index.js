@@ -24,6 +24,28 @@ const routes = [
     } 
   },
   {
+    path: '/colors',
+    name: 'colors',
+    component: () => import('../views/Colors.vue'),
+    async beforeEnter(to, from, next) {
+      try {
+        var hasPermission = localStorage.getItem("hasPermission");
+        if (hasPermission) {
+          next()
+        }
+        else {
+          next({
+            name: "login"
+          })
+        }
+      } catch (e) {
+        next({
+          name: "login"
+        })
+      }
+    } 
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('../views/Login.vue')
